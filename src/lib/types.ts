@@ -86,3 +86,6 @@ export type AiResult =
   | (AiResultBase & { kind: 'cover_letter'; content: CoverLetterContent })
 
 export type AiKind = AiResult['kind']
+
+/** Colors of the small rounded labels (badges) on cards. */
+export type BadgeTone = 'red' | 'amber' | 'gray' | 'blue' | 'green' | 'purple'

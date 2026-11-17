@@ -104,3 +104,8 @@
     background: rgb(17 24 39 / 0.45);
   }
 }
+
+/* While a modal is open, the page behind it does not scroll. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}

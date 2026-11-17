@@ -6,6 +6,7 @@ import {
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react'
+import type { BadgeTone } from '../lib/types'
 
 // Small building blocks shared by every screen, so buttons and fields look
 // the same everywhere: 44 px tall (comfortable to tap), 8 px corners.
@@ -131,8 +132,6 @@ export function SelectField({ label, hint, id, className = '', children, ...rest
     </FieldShell>
   )
 }
-
-export type BadgeTone = 'red' | 'amber' | 'gray' | 'blue' | 'green' | 'purple'
 
 const BADGE_STYLES: Record<BadgeTone, string> = {
   red: 'bg-tone-red-bg text-tone-red-fg',
