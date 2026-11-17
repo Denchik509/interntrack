@@ -19,19 +19,37 @@
 - npm run test — тесты
 - npm run build — сборка
 - npm run lint — проверка кода (oxlint)
+- netlify dev — приложение вместе с функцией /api/ai (нужен netlify-cli)
+- PGHOST=localhost PGUSER=postgres supabase/tests/run.sh — проверка RLS
 
 ## Этапы
 
-Один этап — одна ветка, коммит после каждого рабочего шага.
+Коммит после каждого рабочего шага, сообщение описывает этап.
 
 - [x] 0. Подготовка: Vite + React + TypeScript, Tailwind, Vitest, конфиг Netlify
-- [ ] 1. Вход и база: таблицы и Row Level Security в Supabase, экраны входа и регистрации
-- [ ] 2. Заявки списком: форма, список, редактирование, удаление
-- [ ] 3. Канбан: колонки по статусам, перетаскивание (dnd-kit)
-- [ ] 4. Карточка и дедлайны: боковая панель с вкладками, история, подсветка дедлайнов
-- [ ] 5. AI: серверная функция Netlify, анализ вакансии, черновик cover letter
-- [ ] 6. Статистика: счётчики по статусам и простая диаграмма
-- [ ] 7. Полировка: мобильная вёрстка, PWA, тёмная тема, пустые состояния, тесты, README
+- [x] 1. Вход и база: таблицы и Row Level Security в Supabase, вход, демо-режим
+- [x] 2. Заявки: форма, редактирование, удаление
+- [x] 3. Канбан: колонки по статусам, перетаскивание (dnd-kit)
+- [x] 4. Карточка и дедлайны: боковая панель с вкладками, история, подсветка дедлайнов
+- [x] 5. AI: серверная функция Netlify, анализ вакансии, черновик cover letter
+- [x] 6. Статистика: счётчики, доля ответов, диаграммы этапов и отказов
+- [x] 7. Полировка: мобильная вёрстка, PWA, тёмная тема, пустые состояния, тесты, README
+
+Дальше по плану: напоминания на email, несколько версий CV, экспорт в календарь,
+вопросы к интервью, расширение браузера.
+
+## Устройство кода
+
+Подробно — в docs/how-it-works.md. Коротко:
+
+- src/lib — чистая логика без React (даты, дедлайны, статусы, статистика), с тестами.
+- src/data — интерфейс Repository и две реализации: Supabase и демо (localStorage).
+  Новое действие с данными добавляется в обе.
+- src/state/TrackerProvider.tsx — все данные пользователя и действия с ними.
+- server/ai — логика функции /api/ai; netlify/functions/ai.ts только собирает её.
+  Ключ ANTHROPIC_API_KEY живёт только на сервере.
+- Изменения схемы базы — новым файлом в supabase/migrations, плюс проверка в
+  supabase/tests/10_rls_checks.sql для каждой новой таблицы.
 
 ## Данные (Supabase)
 
@@ -40,7 +58,7 @@
   applied_at, job_description, notes, created_at, updated_at
 - application_events: id, application_id, type, happened_at, note
 - cv_versions: id, user_id, title, content, is_default
-- ai_results: id, application_id, kind, content, created_at
+- ai_results: id, application_id, kind, content (jsonb), cv_title, created_at
 
 status: wishlist, applied, test, interview, offer, rejected.
 kind: analysis, cover_letter.
