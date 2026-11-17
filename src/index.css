@@ -1,24 +1,106 @@
 @import 'tailwindcss';
 
+/* `dark:` utilities apply when <html> has the class "dark" (set by the theme switch). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Design tokens from the InternTrack mockups.
- * Each token becomes a Tailwind utility: --color-accent -> bg-accent, text-accent, ...
- * Hex values are pinned because Tailwind 4's default palette differs slightly
- * from the colors used in the design.
+ * Each token becomes a Tailwind utility: --color-surface -> bg-surface, text-surface, ...
+ * Colors are named by their job, not by their hue, so the dark theme only
+ * redefines the values below and no component needs `dark:` classes.
  */
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* One accent color for buttons, links and the active navigation item */
-  --color-accent: #4f46e5;
-  --color-accent-soft: #eef2ff;
-  --color-accent-strong: #3730a3;
+  /* Page background, cards, borders, text */
+  --color-canvas: #f3f4f6;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f9fafb;
+  --color-line: #e5e7eb;
+  --color-line-strong: #d1d5db;
+  --color-ink: #111827;
+  --color-ink-muted: #4b5563;
 
-  /* One color per application status (kanban column dots) */
+  /* One accent: indigo for buttons, links and the active navigation item */
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-ink: #3730a3;
+  --color-accent-soft: #eef2ff;
+
+  /* One color per application status (dots next to column titles) */
   --color-status-wishlist: #6b7280;
   --color-status-applied: #2563eb;
   --color-status-test: #7c3aed;
   --color-status-interview: #d97706;
   --color-status-offer: #16a34a;
   --color-status-rejected: #dc2626;
+
+  /* Badge colors: background + text pairs with at least 4.5:1 contrast */
+  --color-tone-red-bg: #fee2e2;
+  --color-tone-red-fg: #991b1b;
+  --color-tone-amber-bg: #fef3c7;
+  --color-tone-amber-fg: #92400e;
+  --color-tone-gray-bg: #f3f4f6;
+  --color-tone-gray-fg: #374151;
+  --color-tone-blue-bg: #dbeafe;
+  --color-tone-blue-fg: #1e40af;
+  --color-tone-green-bg: #dcfce7;
+  --color-tone-green-fg: #166534;
+  --color-tone-purple-bg: #ede9fe;
+  --color-tone-purple-fg: #5b21b6;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --color-canvas: #0b1120;
+  --color-surface: #111827;
+  --color-surface-muted: #1a2232;
+  --color-line: #273244;
+  --color-line-strong: #3b4658;
+  --color-ink: #f3f4f6;
+  --color-ink-muted: #a3acb9;
+
+  --color-accent-ink: #a5b4fc;
+  --color-accent-soft: #1e1b4b;
+
+  --color-tone-red-bg: #450a0a;
+  --color-tone-red-fg: #fca5a5;
+  --color-tone-amber-bg: #422006;
+  --color-tone-amber-fg: #fcd34d;
+  --color-tone-gray-bg: #1f2937;
+  --color-tone-gray-fg: #d1d5db;
+  --color-tone-blue-bg: #172554;
+  --color-tone-blue-fg: #93c5fd;
+  --color-tone-green-bg: #052e16;
+  --color-tone-green-fg: #86efac;
+  --color-tone-purple-bg: #2e1065;
+  --color-tone-purple-fg: #c4b5fd;
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* A visible focus ring for keyboard users on every interactive element */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  dialog::backdrop {
+    background: rgb(17 24 39 / 0.45);
+  }
 }

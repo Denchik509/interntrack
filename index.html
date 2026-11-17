@@ -15,6 +15,14 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     />
     <title>InternTrack</title>
+    <script>
+      // Apply the saved theme before the page paints, so it never flashes.
+      try {
+        if (localStorage.getItem('interntrack-theme') === 'dark') {
+          document.documentElement.classList.add('dark')
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

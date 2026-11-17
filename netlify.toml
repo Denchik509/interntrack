@@ -6,3 +6,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# The app is a single page: every address (/stats, /applications/123, ...)
+# returns index.html, and React Router shows the right screen.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
