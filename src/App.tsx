@@ -8,6 +8,7 @@ import { BoardPage } from './pages/BoardPage'
 import { CvPage } from './pages/CvPage'
 import { NewApplicationPage } from './pages/NewApplicationPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { StatsPage } from './pages/StatsPage'
 
 /**
  * The page map. Everything inside <RequireAuth> needs a signed-in user;
@@ -26,6 +27,7 @@ function App() {
                 <Route path="new" element={<NewApplicationPage />} />
                 <Route path="applications/:id" element={<ApplicationPanel />} />
               </Route>
+              <Route path="/stats" element={<StatsPage />} />
               <Route path="/cv" element={<CvPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>

@@ -27,6 +27,9 @@
   --color-accent-ink: #3730a3;
   --color-accent-soft: #eef2ff;
 
+  /* Bars in charts: checked for contrast against the chart surface */
+  --color-chart: #4f46e5;
+
   /* One color per application status (dots next to column titles) */
   --color-status-wishlist: #6b7280;
   --color-status-applied: #2563eb;
@@ -62,6 +65,7 @@
   --color-ink-muted: #a3acb9;
 
   --color-accent-ink: #a5b4fc;
+  --color-chart: #7076f3;
   --color-accent-soft: #1e1b4b;
 
   --color-tone-red-bg: #450a0a;
