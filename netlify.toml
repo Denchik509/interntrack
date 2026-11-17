@@ -9,7 +9,13 @@
 
 # The app is a single page: every address (/stats, /applications/123, ...)
 # returns index.html, and React Router shows the right screen.
+# /api/ai is not affected: a function with config.path takes priority.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[functions]
+  # Server functions live here; Netlify bundles each file with esbuild.
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

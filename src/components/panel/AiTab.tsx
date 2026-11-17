@@ -3,21 +3,35 @@ import { formatLongDate, todayISO, toISODate } from '../../lib/dates'
 import type { AnalysisContent, Application } from '../../lib/types'
 import type { TabId } from '../../pages/ApplicationPanel'
 import { useTracker } from '../../state/TrackerProvider'
+import type { AiActions } from '../../state/useAiActions'
 import { AlertIcon, CheckIcon, SparkleIcon } from '../icons'
+import { Button } from '../ui'
+import { AiBlockerNote, AiErrorNote, AiRunning } from './AiStatus'
 import { NextStep } from './NextStep'
 
 interface Props {
   application: Application
+  ai: AiActions
   onOpenTab(tab: TabId): void
 }
 
-export function AiTab({ application }: Props) {
+export function AiTab({ application, ai, onOpenTab }: Props) {
   const { aiResults } = useTracker()
   const analysis = latestResult(aiResults, application.id, 'analysis')
+  const disabled = ai.blocker !== null || ai.running !== null
+
+  function writeLetter() {
+    onOpenTab('letter')
+    void ai.run('cover_letter')
+  }
 
   return (
     <div className="flex flex-col gap-5">
       <NextStep application={application} />
+      <AiBlockerNote blocker={ai.blocker} onOpenVacancy={() => onOpenTab('vacancy')} />
+      {ai.running === 'analysis' && <AiRunning text="AI сравнивает вакансию с твоим CV. Обычно это 5–20 секунд." />}
+      {ai.error?.kind === 'analysis' && <AiErrorNote message={ai.error.message} />}
+
       {analysis ? (
         <>
           <AnalysisView content={analysis.content} />
@@ -27,8 +41,22 @@ export function AiTab({ application }: Props) {
           </p>
         </>
       ) : (
-        <p className="text-sm text-ink-muted">AI-анализа для этой заявки пока нет.</p>
+        ai.running !== 'analysis' && (
+          <p className="text-sm text-ink-muted">
+            AI сравнит вакансию с твоим CV: что уже совпадает, чего не хватает и что стоит подчеркнуть в
+            заявке.
+          </p>
+        )
       )}
+
+      <div className="flex flex-wrap gap-3 border-t border-line pt-4">
+        <Button variant="primary" disabled={disabled} onClick={writeLetter}>
+          Написать cover letter
+        </Button>
+        <Button disabled={disabled} busy={ai.running === 'analysis'} onClick={() => void ai.run('analysis')}>
+          {analysis ? 'Обновить анализ' : 'Запустить анализ'}
+        </Button>
+      </div>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { ToastProvider } from './components/Toaster'
 import { ApplicationPanel } from './pages/ApplicationPanel'
 import { AuthPage } from './pages/AuthPage'
 import { BoardPage } from './pages/BoardPage'
+import { CvPage } from './pages/CvPage'
 import { NewApplicationPage } from './pages/NewApplicationPage'
 import { ProfilePage } from './pages/ProfilePage'
 
@@ -25,6 +26,7 @@ function App() {
                 <Route path="new" element={<NewApplicationPage />} />
                 <Route path="applications/:id" element={<ApplicationPanel />} />
               </Route>
+              <Route path="/cv" element={<CvPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />

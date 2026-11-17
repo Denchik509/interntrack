@@ -15,6 +15,7 @@ import { eventsOf, rejectedAfter } from '../lib/history'
 import { isStatus, STATUS_META } from '../lib/statuses'
 import { STATUSES, type Application } from '../lib/types'
 import { useTracker } from '../state/TrackerProvider'
+import { useAiActions } from '../state/useAiActions'
 
 const TABS = [
   { id: 'details', label: 'Детали' },
@@ -51,6 +52,8 @@ function PanelContent({ application, onClose }: { application: Application; onCl
   const { notify } = useToast()
   const [tab, setTab] = useState<TabId>('details')
   const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
+  // Lives here, above the tabs, so an AI request survives switching tabs.
+  const ai = useAiActions(application)
   const today = todayISO()
 
   const badge = getCardBadge(application, today, rejectedAfter(eventsOf(application.id, events)))
@@ -187,8 +190,8 @@ function PanelContent({ application, onClose }: { application: Application; onCl
         {/* key={status}: a status change clears the deadline, so the form starts fresh. */}
         {tab === 'details' && <DetailsTab key={application.status} application={application} onDeleted={onClose} />}
         {tab === 'vacancy' && <VacancyTab application={application} />}
-        {tab === 'ai' && <AiTab application={application} onOpenTab={setTab} />}
-        {tab === 'letter' && <LetterTab application={application} onOpenTab={setTab} />}
+        {tab === 'ai' && <AiTab application={application} ai={ai} onOpenTab={setTab} />}
+        {tab === 'letter' && <LetterTab application={application} ai={ai} onOpenTab={setTab} />}
         {tab === 'history' && <HistoryTab application={application} />}
       </div>
     </>
